@@ -55,15 +55,15 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char regA, unsigned char regB
   case ALU_CMP:
     if (cpu->reg[regA] == cpu->reg[regB])
     {
-      cpu->FL = cpu->FL | (1 << 0);
+      cpu->FL = 1;
     }
     else if (cpu->reg[regA] > cpu->reg[regB])
     {
-      cpu->FL = cpu->FL | (1 << 1);
+      cpu->FL = 2;
     }
     else
     {
-      cpu->FL = cpu->FL | (1 << 2);
+      cpu->FL = 0;
     }
     break;
 
@@ -127,6 +127,10 @@ void cpu_run(struct cpu *cpu)
       break;
     case CMP:
       alu(cpu, ALU_CMP, operand_a, operand_b);
+      break;
+    case JMP:
+      cpu->PC = cpu->reg[operand_a];
+      num_operands = 0;
       break;
     case HLT:
       running = 0;
